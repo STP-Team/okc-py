@@ -1,7 +1,7 @@
 """Data models for OKC API."""
 
 from .dossier import Employee, EmployeeData
-from .ure import SpecialistPremiumResponse, HeadPremiumResponse
+from .premium import SpecialistPremiumResponse, HeadPremiumResponse
 from .sl import ReportData, SlRootModel
 
 __all__ = [

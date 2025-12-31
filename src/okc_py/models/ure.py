@@ -3,121 +3,237 @@ from typing import Any
 from pydantic import BaseModel, Field, model_validator
 
 
-class BasePremiumData(BaseModel):
-    """Base class for common premium data fields"""
+class BaseKPIRecord(BaseModel):
+    """Базовая модель для общих полей KPI."""
 
-    # Базовые идентификаторы
-    core_id: int = Field(..., alias="CORE_ID")
-    person_id: int = Field(..., alias="PERSON_ID")
-    employee_id: int = Field(..., alias="EMPLOYEE_ID")
-    user_fullname: str | None = Field(None, alias="USER_FIO")
-    head_id: int | None = Field(None, alias="HEAD_ID")
-    head_fullname: str | None = Field(None, alias="HEAD_FIO")
-    period: str = Field(..., alias="PERIOD")
+    fact_day: str | None = Field(None, alias="FACT_DAY", description="Дата записи")
+    id: int | str | None = Field(
+        None, alias="ID", description="Идентификатор сотрудника"
+    )
+    fullname: str | None = Field(None, alias="FIO", description="ФИО сотрудника")
+    subdivision_name: str | None = Field(
+        None, alias="SUBDIVISION_NAME", description="Название направления"
+    )
+    unit_name: str | None = Field(
+        None, alias="UNIT_NAME", description="Название подразделения"
+    )
 
-    # Организация
-    subdivision_id: int = Field(..., alias="SUBDIVISION_ID")
-    subdivision_name: str = Field(..., alias="SUBDIVISION_NAME")
-    post_id: int = Field(..., alias="POST_ID")
-    post_name: str = Field(..., alias="POST_NAME")
-    user_type_id: int = Field(..., alias="USER_TYPE_ID")
-    user_type_description: str = Field(..., alias="USER_TYPE_DESCRIPTION")
-
-    # ГОК
-    gok: float = Field(..., alias="GOK")
-    gok_normative: float | None = Field(None, alias="GOK_NORMATIVE")
-    gok_normative_rate: float | None = Field(None, alias="NORM_GOK")
-    gok_premium: int = Field(..., alias="PERC_GOK")
-
-    # FLR
-    flr: float = Field(..., alias="FLR")
-    flr_normative: float | None = Field(None, alias="FLR_NORMATIVE")
-    flr_normative_rate: float | None = Field(None, alias="NORM_FLR")
-    flr_premium: int = Field(..., alias="PERC_FLR")
-
-    # Спец. цель
-    pers_target_type_id: int | None = Field(None, alias="PERS_TARGET_TYPE_ID")
-    target: float | None = Field(None, alias="PERS_FACT")
-    target_type: str | None = Field(None, alias="PERS_TARGET_TYPE_NAME")
-    target_normative_first: float | None = Field(None, alias="PERS_PLAN_1")
-    target_normative_second: float | None = Field(None, alias="PERS_PLAN_2")
-    target_normative_rate_first: float | None = Field(None, alias="PERS_RESULT_1")
-    target_normative_rate_second: float | None = Field(None, alias="PERS_RESULT_2")
-    target_premium: int | None = Field(None, alias="PERS_PERCENT")
-    pers_target_manual: int | None = Field(None, alias="PERS_TARGET_MANUAL")
-
-    # Результаты
-    head_adjust_premium: float | None = Field(None, alias="HEAD_ADJUST")
-    total_premium: float = Field(..., alias="TOTAL_PREMIUM")
-    commentary: str | None = Field(None, alias="COMMENTARY")
+    class Config:
+        validate_by_name = True
 
 
-class SpecialistPremiumData(BasePremiumData):
-    """Model for specialist premium data"""
-
-    # Оценка
-    csi: float = Field(..., alias="CSI")
-    csi_normative: float | None = Field(None, alias="CSI_NORMATIVE")
-    csi_normative_rate: float | None = Field(None, alias="NORM_CSI")
-    csi_premium: int = Field(..., alias="PERC_CSI")
-
-    # Отклик
-    csi_response: float | None = Field(None, alias="CSI_RESPONSE")
-    csi_response_normative: float | None = Field(None, alias="CSI_RESPONSE_NORMATIVE")
-    csi_response_normative_rate: float | None = Field(None, alias="NORM_CSI_RESPONSE")
-
-    # Прочие показатели
-    discipline_premium: int = Field(..., alias="PERC_DISCIPLINE")
-    tests_premium: int = Field(..., alias="PERC_TESTING")
-    thanks_premium: int = Field(..., alias="PERC_THANKS")
-    tutors_premium: float = Field(..., alias="PERC_TUTORS")
-
-    # Специфичные для специалистов поля
-    total_contacts: int = Field(...)
+class AHTDataRecord(BaseKPIRecord):
+    aht_chats_web: int | None = Field(
+        None, alias="WEB_CHATS", description="Чаты через Web"
+    )
+    aht_chats_mobile: int | None = Field(
+        None, alias="MOB_CHATS", description="Чаты через Mobile"
+    )
+    aht_chats_telegram: int | None = Field(
+        None, alias="TGRAM_CHATS", description="Чаты через Telegram"
+    )
+    aht_chats_viber: int | None = Field(
+        None, alias="VIBER_CHATS", description="Чаты через Viber"
+    )
+    aht_chats_dhcp: int | None = Field(
+        None, alias="DHCP_CHATS", description="Чаты через DHCP"
+    )
+    aht_chats_smartdom: int | None = Field(
+        None, alias="SMARTDOM_CHATS", description="Чаты через SmartDom"
+    )
+    aht_total_contacts: int | None = Field(
+        None, description="Общее количество контактов"
+    )
+    aht: int | None = Field(
+        None, alias="AHT", description="Среднее время обработки чата"
+    )
 
     @model_validator(mode="before")
     @classmethod
     def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
         for key in ("TOTAL_CHATS", "TOTAL_CALLS"):
             if key in values:
-                values["total_contacts"] = values[key]
+                values["aht_total_contacts"] = values[key]
                 break
         return values
 
 
-class HeadPremiumData(BasePremiumData):
-    """Model for head (supervisor) premium data"""
+class CSIDataRecord(BaseKPIRecord):
+    total_rated_contacts: int = Field(
+        ..., description="Общее количество оцененных контактов"
+    )
+    csi: float | None = Field(
+        None, alias="CSI", description="Оценка клиентского сервиса"
+    )
 
-    sl: float | None = Field(None, alias="SL_FACT")
-    sl_normative_first: float | None = Field(None, alias="SL_PLAN_1")
-    sl_normative_second: float | None = Field(None, alias="SL_PLAN_2")
-    sl_normative_rate_first: float | None = Field(None, alias="SL_RESULT_1")
-    sl_normative_rate_second: float | None = Field(None, alias="SL_RESULT_2")
-    sl_premium: int = Field(..., alias="SL_PERCENT")
-
-
-class HeadPremiumResponse(BaseModel):
-    """Wrapper for head premium response with not eligible employees"""
-
-    premium: list[HeadPremiumData] = Field(...)
-
-
-class SpecialistPremiumResponse(BaseModel):
-    """Response model for specialist premium data"""
-
-    items: list[SpecialistPremiumData] = Field(...)
-
+    @model_validator(mode="before")
     @classmethod
-    def model_validate(cls, data):
-        """Validate from API response data"""
-        if isinstance(data, list):
-            # If data is a list, wrap it in the items field
-            return cls(
-                items=[SpecialistPremiumData.model_validate(item) for item in data]
-            )
-        elif isinstance(data, dict) and "items" in data:
-            # If data already has items field
-            return super().model_validate(data)
-        else:
-            # Fallback to standard validation
-            return super().model_validate(data)
+    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
+        for key in ("TOTAL_RATED_CHATS", "TOTAL_RATED_CALLS"):
+            if key in values:
+                values["total_rated_contacts"] = values[key]
+                break
+        return values
+
+
+class FLRDataRecord(BaseKPIRecord):
+    flr_total_contacts: int = Field(..., description="Общее количество контактов")
+    flr_services_transfers: int | None = Field(
+        None, alias="TOTAL_TRANSFER", description="Общее количество переводов"
+    )
+    flr_services: int = Field(
+        ..., alias="TOTAL_SERVICE", description="Общее количество сервисных заявок"
+    )
+    flr_services_cross: int = Field(
+        ..., alias="TOTAL_SERVICE2", description="Общее количество сквозных обращений"
+    )
+    flr: float | None = Field(None, alias="FLR", description="Значение FLR")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
+        for key in ("TOTAL_CHATS", "TOTAL_CALLS"):
+            if key in values:
+                values["flr_total_contacts"] = values[key]
+                break
+        return values
+
+
+class POKDataRecord(BaseKPIRecord):
+    pok_total_contacts: int = Field(..., description="Общее количество контактов")
+    pok_rated_contacts: int = Field(
+        ..., alias="TOTAL_CSI", description="Кол-во оцененных чатов"
+    )
+    pok: float | None = Field(..., alias="PERCENT_CSI", description="% оцененных чатов")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
+        for key in ("TOTAL_CHATS", "TOTAL_CALLS"):
+            if key in values:
+                values["pok_total_contacts"] = values[key]
+                break
+        return values
+
+
+class DelayDataRecord(BaseKPIRecord):
+    # НЦК
+    avg_web: float | None = Field(
+        None, alias="AVG_WEB", description="Среднее время в Web_chat"
+    )
+    avg_mobile: float | None = Field(
+        None, alias="AVG_MOBILE", description="Среднее время в Mobile_chat"
+    )
+    avg_dhcp: float | None = Field(
+        None, alias="AVG_DHCP", description="Среднее время в DHCP_chat"
+    )
+    avg_smart: float | None = Field(
+        None, alias="AVG_SMART", description="Среднее время в SmartDom_chat"
+    )
+
+    # НТП
+    work_time: int | None = Field(
+        None, alias="WORK_TIME", description="Общее рабочее время"
+    )
+    unwork_time: int | None = Field(
+        None, alias="UNWORK_TIME", description="Время в нерабочем статусе"
+    )
+    unwork_time_percent: float | None = Field(
+        None, alias="UNWORK_TIME_PERCENT", description="% нерабочих статусов"
+    )
+
+    delay: float | None = Field(None, description="Общее среднее время")
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
+        for key in ("AVG_TOTAL", "UNWORK_TIME_PERCENT"):
+            if key in values:
+                values["delay"] = values[key]
+                break
+        return values
+
+
+class SalesDataRecord(BaseKPIRecord):
+    """Model for Sales data record."""
+
+    sales_videos: int | None = Field(None, alias="VIDEO")
+    sales_routers: int | None = Field(None, alias="ROUTER")
+    sales_tvs: int | None = Field(None, alias="TV")
+    sales_intercoms: int | None = Field(None, alias="DOMOFON")
+    sales_conversion: float | None = Field(None, alias="CONVERS")
+
+    sales: int | None = Field(None, alias="TOTAL_EQUIPMENT")
+
+
+class SalesPotentialDataRecord(BaseKPIRecord):
+    """Model for Potential sales data record."""
+
+    sales_potential_video: int | None = Field(None, alias="TOTAL_VIDEO")
+    sales_potential_routers: int | None = Field(None, alias="TOTAL_ROUTERS")
+    sales_potential_tvs: int | None = Field(None, alias="TOTAL_TV")
+    sales_potential_intercoms: int | None = Field(None, alias="TOTAL_DOMOFONS")
+    sales_potential_conversion: float | None = Field(None, alias="CONVERSION")
+
+    sales_potential: int | None = Field(None, alias="TOTAL_MATERIALS_ENS")
+
+
+class PaidServiceRecord(BaseKPIRecord):
+    """Model for Paid service record."""
+
+    services_remote: int | None = Field(None, alias="PS_REMOTE")
+    services_onsite: int | None = Field(None, alias="PS_NOT_REMOTE")
+    services_conversion: float | None = Field(None, alias="CONVERS")
+
+    services: int | None = Field(None, alias="PS_TOTAL")
+
+
+class GenericKPIDataRecord(BaseKPIRecord):
+    additional_fields: dict[str, Any] = Field(
+        default_factory=dict, description="Дополнительные динамические поля"
+    )
+
+    def __init__(self, **data):
+        known_fields = set(self.model_fields.keys())
+        base_data = {k: v for k, v in data.items() if k in known_fields}
+        additional_data = {k: v for k, v in data.items() if k not in known_fields}
+        super().__init__(**base_data, additional_fields=additional_data)
+
+
+class HeaderDefinition(BaseModel):
+    title: str = Field(..., description="Display title for the column")
+    key: str = Field(..., description="Field key/identifier")
+
+    class Config:
+        validate_by_name = True
+
+
+KPIDataRecord = (
+    AHTDataRecord
+    | FLRDataRecord
+    | CSIDataRecord
+    | POKDataRecord
+    | DelayDataRecord
+    | SalesDataRecord
+    | SalesPotentialDataRecord
+    | PaidServiceRecord
+    | GenericKPIDataRecord
+)
+
+
+class KPIResponse(BaseModel):
+    data: list[dict[str, Any]] = Field(..., description="Сырые данные KPI")
+    headers: list[HeaderDefinition] = Field(..., description="Определение колонок")
+    metrics_href: str = Field(..., alias="metricsHref", description="Ссылка на метрики")
+
+    class Config:
+        validate_by_name = True
+
+
+class TypedKPIResponse(BaseModel):
+    data: list[KPIDataRecord] = Field(..., description="Типизированные данные KPI")
+    headers: list[HeaderDefinition] = Field(..., description="Определение колонок")
+    metrics_href: str = Field(..., alias="metricsHref", description="Ссылка на метрики")
+
+    class Config:
+        validate_by_name = True

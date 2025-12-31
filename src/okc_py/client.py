@@ -8,6 +8,7 @@ from .auth import authenticate
 from .config import Settings
 from .repos import SlAPI
 from .repos.dossier import DossierAPI
+from .repos.premium import PremiumAPI
 from .repos.ure import UreAPI
 
 
@@ -25,6 +26,7 @@ class Client:
         self._session: Optional[ClientSession] = None
         self._authenticated = False
         self.dossier: Optional[DossierAPI] = None
+        self.premium: Optional[PremiumAPI] = None
         self.ure: Optional[UreAPI] = None
         self.sl: Optional[SlAPI] = None
 
@@ -53,6 +55,7 @@ class Client:
             )
             self._authenticated = True
             self.dossier = DossierAPI(self._session, self.settings)
+            self.premium = PremiumAPI(self._session, self.settings)
             self.ure = UreAPI(self._session, self.settings)
             self.sl = SlAPI(self._session, self.settings)
             logger.info("Successfully authenticated with OKC API")
