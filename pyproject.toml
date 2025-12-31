@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 
 authors = [
-    "Roman Chursanov roman@chrsnv.ru"
+    {name = "Roman Chursanov", email = "roman@chrsnv.ru"}
 ]
 repository = "https://github.com/STP-Team/okc-py"
 
