@@ -9,6 +9,7 @@ from .config import Settings
 from .repos import SlAPI
 from .repos.dossier import DossierAPI
 from .repos.premium import PremiumAPI
+from .repos.tests import TestsAPI
 from .repos.ure import UreAPI
 
 
@@ -29,6 +30,7 @@ class Client:
         self.premium: Optional[PremiumAPI] = None
         self.ure: Optional[UreAPI] = None
         self.sl: Optional[SlAPI] = None
+        self.tests: Optional[TestsAPI] = None
 
     async def __aenter__(self):
         """Async context manager entry - creates session and authenticates."""
@@ -58,6 +60,7 @@ class Client:
             self.premium = PremiumAPI(self._session, self.settings)
             self.ure = UreAPI(self._session, self.settings)
             self.sl = SlAPI(self._session, self.settings)
+            self.tests = TestsAPI(self._session, self.settings)
             logger.info("Successfully authenticated with OKC API")
         except Exception as e:
             await self._session.close()

@@ -5,6 +5,7 @@ from .premium import SpecialistPremiumResponse, HeadPremiumResponse
 from .ure import TypedKPIResponse
 from .sl import ReportData, SlRootModel
 from .tutors import TutorGraphResponse, GraphFiltersResponse
+from .tests import AssignedTest
 
 __all__ = [
     "Employee",
@@ -16,4 +17,5 @@ __all__ = [
     "SlRootModel",
     "TutorGraphResponse",
     "GraphFiltersResponse",
+    "AssignedTest",
 ]

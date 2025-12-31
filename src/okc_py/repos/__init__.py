@@ -3,7 +3,8 @@
 from .dossier import DossierAPI
 from .premium import PremiumAPI
 from .sl import SlAPI
+from .tests import TestsAPI
 from .tutors import TutorsAPI
 from .ure import UreAPI
 
-__all__ = ["DossierAPI", "PremiumAPI", "UreAPI", "SlAPI", "TutorsAPI"]
+__all__ = ["DossierAPI", "PremiumAPI", "UreAPI", "SlAPI", "TutorsAPI", "TestsAPI"]
