@@ -8,7 +8,6 @@ requires-python = ">=3.14"
 authors = [
     {name = "Roman Chursanov", email = "roman@chrsnv.ru"}
 ]
-repository = "https://github.com/STP-Team/okc-py"
 
 dependencies = [
     "aiohttp[speedups]>=3.13.2",
@@ -17,6 +16,9 @@ dependencies = [
     "pydantic-settings>=2.12.0",
     "setuptools>=80.9.0",
 ]
+
+[project.urls]
+repository = "https://github.com/STP-Team/okc-py"
 
 [tool.uv.workspace]
 members = [
