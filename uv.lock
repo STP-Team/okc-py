@@ -297,7 +297,7 @@ wheels = [
 
 [[package]]
 name = "okc-py"
-version = "0.0.2"
+version = "0.0.3"
 source = { virtual = "." }
 dependencies = [
     { name = "aiohttp", extra = ["speedups"] },

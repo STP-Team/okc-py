@@ -1,6 +1,6 @@
 [project]
 name = "okc_py"
-version = "0.0.2"
+version = "0.0.3"
 description = "OKC API Python wrapper"
 readme = "README.md"
 requires-python = ">=3.14"
