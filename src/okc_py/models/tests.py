@@ -53,3 +53,31 @@ class AssignedTest(BaseModel):
     status_name: str = Field(description="Статус теста")
     active_from: str = Field(description="Дата назначения теста")
     start_date: str | None = Field(description="Дата начала теста")
+
+
+class TestsSubdivision(BaseModel):
+    """Модель подразделения."""
+
+    id: str = Field(description="Идентификатор подразделения")
+    name: str = Field(description="Название подразделения")
+    units: list[str | None] = Field(description="Список идентификаторов подразделений")
+
+
+class TestsUser(BaseModel):
+    """Модель пользователя."""
+
+    id: str = Field(description="Идентификатор пользователя")
+    name: str = Field(description="ФИО пользователя")
+    head: str | None = Field(description="Идентификатор руководителя")
+    subdivision: str = Field(description="Идентификатор подразделения")
+    unit: str | None = Field(description="Идентификатор подразделения")
+
+
+class TestsSupervisor(BaseModel):
+    """Модель руководителя."""
+
+    id: str = Field(description="Идентификатор руководителя")
+    name: str = Field(description="ФИО руководителя")
+    head: str | None = Field(description="Идентификатор вышестоящего руководителя")
+    subdivision: str = Field(description="Идентификатор подразделения")
+    unit: str | None = Field(description="Идентификатор подразделения")

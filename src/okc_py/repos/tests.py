@@ -1,10 +1,18 @@
-import logging
 from urllib.parse import urlencode
 
+from loguru import logger
 from pydantic import TypeAdapter
 
 from ..config import Settings
-from ..models.tests import AssignedTest, Test, TestDetailedTheme, TestCategory
+from ..models.tests import (
+    AssignedTest,
+    Test,
+    TestDetailedTheme,
+    TestCategory,
+    TestsUser,
+    TestsSupervisor,
+    TestsSubdivision,
+)
 from .base import BaseAPI
 
 
@@ -12,10 +20,9 @@ class TestsAPI(BaseAPI):
     def __init__(self, session, settings: Settings):
         super().__init__(session, settings)
         self.service_url = "testing/api"
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def get_tests(self) -> list[Test] | None:
-        tests_adapter = TypeAdapter(list[Test])
+        adapter = TypeAdapter(list[Test])
 
         response = await self.post(
             f"{self.service_url}/get-tests",
@@ -23,10 +30,10 @@ class TestsAPI(BaseAPI):
 
         try:
             data = await response.json()
-            tests = tests_adapter.validate_python(data)
+            tests = adapter.validate_python(data)
             return tests
         except Exception as e:
-            self.logger.error(f"Error parsing tests response: {e}")
+            logger.error(f"[Tests] Error parsing tests: {e}")
             return None
 
     async def get_assigned_tests(
@@ -43,7 +50,7 @@ class TestsAPI(BaseAPI):
         Returns:
             Список назначенных тестов или None в случае ошибки
         """
-        assigned_tests_adapter = TypeAdapter(list[AssignedTest])
+        adapter = TypeAdapter(list[AssignedTest])
 
         # Подготовка данных формы в URL-encoded формате
         form_params = [
@@ -75,14 +82,14 @@ class TestsAPI(BaseAPI):
 
         try:
             data = await response.json()
-            tests = assigned_tests_adapter.validate_python(data)
+            tests = adapter.validate_python(data)
             return tests
         except Exception as e:
-            self.logger.error(f"Error parsing assigned tests: {e}")
+            logger.error(f"[Tests] Error parsing assigned tests: {e}")
             return None
 
     async def get_themes(self) -> list[TestDetailedTheme] | None:
-        themes_adapter = TypeAdapter(list[TestDetailedTheme])
+        adapter = TypeAdapter(list[TestDetailedTheme])
 
         response = await self.post(
             f"{self.service_url}/get-themes",
@@ -90,14 +97,14 @@ class TestsAPI(BaseAPI):
 
         try:
             data = await response.json()
-            themes = themes_adapter.validate_python(data)
+            themes = adapter.validate_python(data)
             return themes
         except Exception as e:
-            self.logger.error(f"Error parsing themes: {e}")
+            logger.error(f"[Tests] Error parsing themes: {e}")
             return None
 
     async def get_categories(self) -> list[TestCategory] | None:
-        categories_adapter = TypeAdapter(list[TestCategory])
+        adapter = TypeAdapter(list[TestCategory])
 
         response = await self.post(
             f"{self.service_url}/get-categories",
@@ -105,8 +112,53 @@ class TestsAPI(BaseAPI):
 
         try:
             data = await response.json()
-            categories = categories_adapter.validate_python(data)
+            categories = adapter.validate_python(data)
             return categories
         except Exception as e:
-            self.logger.error(f"Error parsing categories response: {e}")
+            logger.error(f"[Tests] Error parsing categories response: {e}")
+            return None
+
+    async def get_users(self) -> list[TestsUser] | None:
+        adapter = TypeAdapter(list[TestsUser])
+
+        response = await self.post(
+            f"{self.service_url}/get-users",
+        )
+
+        try:
+            data = await response.json()
+            users = adapter.validate_python(data)
+            return users
+        except Exception as e:
+            logger.error(f"[Tests] Error parsing users response: {e}")
+            return None
+
+    async def get_supervisors(self) -> list[TestsSupervisor] | None:
+        adapter = TypeAdapter(list[TestsSupervisor])
+
+        response = await self.post(
+            f"{self.service_url}/get-supervisers",
+        )
+
+        try:
+            data = await response.json()
+            supervisors = adapter.validate_python(data)
+            return supervisors
+        except Exception as e:
+            logger.error(f"[Tests] Error parsing supervisors response: {e}")
+            return None
+
+    async def get_subdivisions(self) -> list[TestsSubdivision] | None:
+        adapter = TypeAdapter(list[TestsSubdivision])
+
+        response = await self.post(
+            f"{self.service_url}/get-subdivisions",
+        )
+
+        try:
+            data = await response.json()
+            subdivisions = adapter.validate_python(data)
+            return subdivisions
+        except Exception as e:
+            logger.error(f"[Tests] Error parsing subdivisions response: {e}")
             return None

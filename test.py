@@ -12,7 +12,7 @@ async def main():
             PASSWORD="Grigorev1230033ISSSS1!",
         )
     ) as client:
-        response = await client.tests.get_categories()
+        response = await client.tests.get_users()
         print(response)
 
 
