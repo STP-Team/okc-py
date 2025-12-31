@@ -2,7 +2,7 @@ from typing import Any
 
 from aiohttp import ClientResponse, ClientSession
 
-from okc_py.config import Settings
+from ..config import Settings
 
 
 class BaseAPI:
