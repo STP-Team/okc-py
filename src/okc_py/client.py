@@ -7,32 +7,24 @@ from loguru import logger
 from .auth import authenticate
 from .config import Settings
 from .repos.dossier import DossierAPI
+from .repos.ure import UreAPI
 
 
 class Client:
-    """Main OKC API client that handles authentication and session management."""
+    """Основной клиент для доступа к API."""
 
-    def __init__(self, settings: Optional[Settings] = None, **kwargs):
-        """Initialize the OKC client.
+    def __init__(self, settings: Settings):
+        """Инициализация клиента.
 
         Args:
-            settings: Settings object or None to load from environment
-            **kwargs: Override specific settings (BASE_URL, USERNAME, PASSWORD)
+            settings: Объект Settings
         """
-        if settings is None:
-            # Allow overriding specific settings
-            env_settings = Settings()
-            self.settings = Settings(
-                BASE_URL=kwargs.get("BASE_URL", env_settings.BASE_URL),
-                USERNAME=kwargs.get("USERNAME", env_settings.USERNAME),
-                PASSWORD=kwargs.get("PASSWORD", env_settings.PASSWORD),
-            )
-        else:
-            self.settings = settings
+        self.settings = settings
 
         self._session: Optional[ClientSession] = None
         self._authenticated = False
         self.dossier: Optional[DossierAPI] = None
+        self.ure: Optional[UreAPI] = None
 
     async def __aenter__(self):
         """Async context manager entry - creates session and authenticates."""
@@ -59,6 +51,7 @@ class Client:
             )
             self._authenticated = True
             self.dossier = DossierAPI(self._session, self.settings)
+            self.ure = UreAPI(self._session, self.settings)
             logger.info("Successfully authenticated with OKC API")
         except Exception as e:
             await self._session.close()
@@ -74,7 +67,7 @@ class Client:
             self.dossier = None
 
     def _ensure_authenticated(self):
-        """Ensure client is authenticated before API calls."""
+        """Убеждаемся, что клиент авторизован перед тем, как делать запросы."""
         if not self._authenticated or not self._session:
             raise RuntimeError(
                 "Client not authenticated. Use 'await client.connect()' or async context manager."

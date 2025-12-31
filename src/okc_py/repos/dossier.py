@@ -7,11 +7,21 @@ from pydantic import TypeAdapter
 
 
 class DossierAPI(BaseAPI):
+    """Взаимодействия с API профайла."""
+
     def __init__(self, session, settings: Settings):
         super().__init__(session, settings)
         self.service_url = "dossier"
 
     async def get_employees(self, exclude_fired: bool = False) -> list[Employee] | None:
+        """Получает сотрудников из профайла.
+
+        Args:
+            exclude_fired: Исключить ли уволенных
+
+        Returns:
+            Список сотрудников
+        """
         employee_list_adapter = TypeAdapter(list[Employee])
 
         response = await self.post(f"{self.service_url}/api/get-employees")
@@ -36,6 +46,17 @@ class DossierAPI(BaseAPI):
         show_kpi: bool = True,
         show_criticals: bool = True,
     ) -> EmployeeData | None:
+        """Получает сотрудника по ФИО или идентификатору.
+
+        Args:
+            employee_id: Идентификатор сотрудника на OKC
+            employee_fullname: ФИО сотрудника
+            show_kpi: Получать ли показатели сотрудника
+            show_criticals: Получать ли критические ошибки сотрудника
+
+        Returns:
+            Информация о сотруднике, если найден, иначе None
+        """
         if employee_id is None and employee_fullname:
             employees = await self.get_employees()
             if not employees:
