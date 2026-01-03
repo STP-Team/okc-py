@@ -159,9 +159,7 @@ class Client:
                 else:
                     req_kwargs["data"] = data
 
-                async with self._session.request(
-                    method, url, **req_kwargs
-                ) as response:
+                async with self._session.request(method, url, **req_kwargs) as response:
                     # Check for rate limiting
                     if response.status == 429:
                         retry_after = float(
