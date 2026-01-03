@@ -1,34 +1,22 @@
-# OKC Python Wrapper
+# Python обёртка для OKC API
 
-[![PyPI](https://img.shields.io/pypi/v/okc-py)](https://pypi.org/project/okc-py/)
-[![Python](https://img.shields.io/pypi/pyversions/okc-py)](https://pypi.org/project/okc-py/)
-[![License](https://img.shields.io/pypi/l/okc-py)](LICENSE)
+Асинхронная обёртка для OKC API. Приватный пакет
 
-Asynchronous Python wrapper for the OKC API with modern async/await syntax, type hints, and comprehensive error handling.
-
-## Installation
+## Установка
 
 ```bash
-pip install okc-py
+pip install git+https://github.com/STP-Team/okc-py.git
 ```
 
-or
+или
 
 ```bash
-uv add okc-py
+uv add git+https://github.com/STP-Team/okc-py.git
 ```
 
-## Configuration
+## Конфигурация
 
-Set your environment variables in a `.env` file:
-
-```bash
-OKC_BASE_URL=https://okc.example.com
-OKC_USERNAME=your_username
-OKC_PASSWORD=your_password
-```
-
-Or configure via `Settings`:
+Конфигурация использует класс `Settings`:
 
 ```python
 from okc_py import OKC, Settings
@@ -41,47 +29,25 @@ settings = Settings(
 )
 
 async with OKC(settings=settings) as okc:
-    # Use the client
     pass
 ```
 
-## Quick Start
+## Примеры
 
-```python
-import asyncio
-from okc_py import OKC
+В директории `examples` лежат примеры использования пакета. Простой пример
 
-async def main():
-    async with OKC() as okc:
-        # Access different API repositories
-        dossier = await okc.dossier.get(...)
-        print(f"Dossier: {dossier}")
+## Репозитории
 
-asyncio.run(main())
-```
+Клиент предоставляет доступ к следующим API репозиториям:
 
-## Features
+- `dossier` - API профайла (сотрудники, история должностей, показателей, ГОК)
+- `premium` - API премиума (проценты выполнения премии, нормативы)
+- `ure` - API URE (показатели)
+- `sl` - API SL (Service Level)
+- `tests` - API тестов (все тесты, назначенные сотрудникам тесты)
+- `tutors` - API наставничества (наставники, стажеры, график)
 
-- **Modern async/await**: Built with `asyncio` and `aiohttp` for efficient async operations
-- **Type hints**: Full type annotations for better IDE support and type checking
-- **Error handling**: Comprehensive exception hierarchy for easy error handling
-- **Rate limiting**: Built-in rate limiting to respect API limits
-- **Retry logic**: Automatic retries with exponential backoff
-- **Logging**: Structured logging with `loguru`
-- **Context managers**: Support for async context managers
-
-## API Repositories
-
-The OKC client provides access to the following API repositories:
-
-- `dossier` - Dossier management
-- `premium` - Premium features
-- `ure` - URE operations
-- `sl` - SL operations
-- `tests` - Tests management
-- `tutors` - Tutors information
-
-## Error Handling
+## Обработка ошибок
 
 ```python
 from okc_py import OKC
@@ -91,6 +57,7 @@ from okc_py.exceptions import (
     NotFoundError,
     OKCError,
 )
+
 
 async def main():
     try:
@@ -105,50 +72,6 @@ async def main():
     except OKCError as e:
         print(f"OKC API error: {e}")
 
+
 asyncio.run(main())
 ```
-
-## Advanced Usage
-
-### Using the Client Directly
-
-```python
-from okc_py import Client, Settings
-
-settings = Settings(BASE_URL="https://okc.example.com")
-client = Client(username="user", password="pass", settings=settings)
-
-await client.connect()
-# Use the client directly
-await client.close()
-```
-
-### Custom Configuration
-
-```python
-from okc_py import OKC, Settings
-
-settings = Settings(
-    BASE_URL="https://okc.example.com",
-    REQUEST_TIMEOUT=60,
-    MAX_RETRIES=5,
-    RETRY_DELAY=2.0,
-    RATE_LIMIT_ENABLED=True,
-    REQUESTS_PER_SECOND=10.0,
-    LOG_LEVEL="DEBUG",
-)
-
-async with OKC(settings=settings) as okc:
-    # Your code here
-    pass
-```
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Links
-
-- [Repository](https://github.com/STP-Team/okc-py)
-- [Issues](https://github.com/STP-Team/okc-py/issues)
-- [Changelog](https://github.com/STP-Team/okc-py/releases)
