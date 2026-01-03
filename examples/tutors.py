@@ -5,8 +5,10 @@ from okc_py import OKC
 
 async def main():
     async with OKC(username="YOUR_USERNAME", password="YOUR_PASSWORD") as client:
+        # Получить доступные фильтры (для автоматического заполнения следующего запроса
         graph_filters = await client.tutors.get_graph_filters(division_id=2)
 
+        # Получить график наставников за промежуток времени
         tutor_graph = await client.tutors.get_full_graph(
             division_id=2,
             start_date="1.12.2025",
