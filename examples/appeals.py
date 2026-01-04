@@ -4,9 +4,7 @@ from okc_py import OKC
 
 
 async def main():
-    async with OKC(
-        username="grigorev.is2", password="Grigorev1230033ISSSS1!"
-    ) as client:
+    async with OKC(username="YOUR_USERNAME", password="YOUR_PASSWORD") as client:
         filters = await client.appeals.get_filters()
         print(f"Filters: {filters}")
 
