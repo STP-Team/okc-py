@@ -1,6 +1,6 @@
 [project]
 name = "okc-py"
-version = "1.0.1"
+version = "1.1.0"
 description = "Asynchronous Python wrapper for the OKC API"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.13"
@@ -65,7 +65,7 @@ target-version = "py313"
 
 [tool.ruff.lint]
 # Enable common rule sets
-extend-select = ["E", "F", "I", "B", "C90", "RUF", "UP"]
+extend-select = ["E", "F", "I", "B", "C90", "UP"]
 
 ignore = [
     "D107", # Allow missing docstring in __init__ if trivial

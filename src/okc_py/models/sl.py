@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -59,7 +61,7 @@ class ReportData(BaseModel):
 
     @field_validator("total_data", mode="before")
     @classmethod
-    def transform_total_data(cls, v: list[dict]) -> dict:
+    def transform_total_data(cls, v: list[dict]) -> dict[Any, Any] | list[dict]:
         """Transform list of text/value pairs into proper object."""
         if isinstance(v, list):
             return {item["text"]: item["value"] for item in v}

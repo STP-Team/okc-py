@@ -2,8 +2,6 @@
 
 from typing import Any
 
-from loguru import logger
-
 from ..client import Client
 
 
@@ -151,10 +149,6 @@ class BaseAPI:
             result = await self.client.request("POST", url, json=json, **kwargs)
         else:
             result = await self.client.request("POST", url, data=data, **kwargs)
-
-        # Log if response looks like HTML (error page)
-        if isinstance(result, str) and result.strip().startswith("<!DOCTYPE html>"):
-            logger.warning(f"Received HTML response instead of JSON from {url}")
 
         return _ResponseWrapper(result)
 

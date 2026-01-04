@@ -6,6 +6,7 @@ from .client import Client
 from .config import Settings
 from .exceptions import ConfigurationError
 from .repos import DossierAPI, PremiumAPI, SlAPI, TestsAPI, TutorsAPI, UreAPI
+from .repos.appeals import AppealsAPI
 
 
 class OKC:
@@ -77,6 +78,7 @@ class OKC:
         self.sl: SlAPI | None = None
         self.tests: TestsAPI | None = None
         self.tutors: TutorsAPI | None = None
+        self.appeals: AppealsAPI | None = None
 
         logger.info("OKC API client initialized")
 
@@ -103,6 +105,7 @@ class OKC:
         self.sl = SlAPI(self.client)
         self.tests = TestsAPI(self.client)
         self.tutors = TutorsAPI(self.client)
+        self.appeals = AppealsAPI(self.client)
 
         logger.info("OKC API repositories initialized")
 

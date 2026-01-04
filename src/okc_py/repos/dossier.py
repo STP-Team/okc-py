@@ -11,7 +11,7 @@ class DossierAPI(BaseAPI):
 
     def __init__(self, client: Client):
         super().__init__(client)
-        self.service_url = "dossier"
+        self.service_url = "dossier/api"
 
     async def get_employees(self, exclude_fired: bool = False) -> list[Employee] | None:
         """Получает сотрудников из профайла.
@@ -22,14 +22,14 @@ class DossierAPI(BaseAPI):
         Returns:
             Список сотрудников
         """
-        employee_list_adapter = TypeAdapter(list[Employee])
+        adapter = TypeAdapter(list[Employee])
 
-        response = await self.post(f"{self.service_url}/api/get-employees")
+        response = await self.post(f"{self.service_url}/get-employees")
 
         try:
             data = await response.json()
 
-            employees = employee_list_adapter.validate_python(data)
+            employees = adapter.validate_python(data)
 
             if exclude_fired:
                 employees = [e for e in employees if not e.fired_date]
@@ -71,7 +71,7 @@ class DossierAPI(BaseAPI):
             return None
 
         response = await self.post(
-            endpoint=f"{self.service_url}/api/get-dossier",
+            endpoint=f"{self.service_url}/get-dossier",
             json={
                 "employee": employee_id,
                 "showKpi": show_kpi,
