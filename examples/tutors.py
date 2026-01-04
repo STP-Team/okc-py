@@ -1,10 +1,17 @@
 import asyncio
+import os
+
+from dotenv import load_dotenv
 
 from okc_py import OKC
 
+load_dotenv()
+
 
 async def main():
-    async with OKC(username="YOUR_USERNAME", password="YOUR_PASSWORD") as client:
+    async with OKC(
+        username=os.getenv("OKC_USERNAME"), password=os.getenv("OKC_PASSWORD")
+    ) as client:
         # Получить доступные фильтры (для автоматического заполнения следующего запроса
         graph_filters = await client.tutors.get_graph_filters(division_id=2)
         print(f"Graph filters: {graph_filters}")

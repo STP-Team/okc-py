@@ -1,10 +1,17 @@
 import asyncio
+import os
+
+from dotenv import load_dotenv
 
 from okc_py import OKC
 
+load_dotenv()
+
 
 async def main():
-    async with OKC(username="YOUR_USERNAME", password="YOUR_PASSWORD") as client:
+    async with OKC(
+        username=os.getenv("OKC_USERNAME"), password=os.getenv("OKC_PASSWORD")
+    ) as client:
         # Получаем фильтры для чатов (включает данные об очередях)
         filters = await client.sl.get_vq_chat_filter()
         print(f"Filters: {filters}")
