@@ -27,7 +27,7 @@ class AppealsAPI(BaseAPI):
             data = await response.json()
             return FiltersResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"Ошибка получения списка фильтров: {e}")
+            logger.error(f"[Обращения] Ошибка получения фильтров: {e}")
             return None
 
     async def get_appeals_by_city(
@@ -52,7 +52,7 @@ class AppealsAPI(BaseAPI):
             data = await response.json()
             return AppealsByCityResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"Ошибка получения обращений по городам: {e}")
+            logger.error(f"[Обращения] Ошибка получения обращений по городам: {e}")
             return None
 
     async def get_appeals_by_problem(
@@ -79,7 +79,9 @@ class AppealsAPI(BaseAPI):
             data = await response.json()
             return AppealsByProblemResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"Ошибка получения обращений по типам проблем: {e}")
+            logger.error(
+                f"[Обращения] Ошибка получения обращений по типам проблем: {e}"
+            )
             return None
 
     async def get_details_by_city(
@@ -108,7 +110,9 @@ class AppealsAPI(BaseAPI):
             data = await response.json()
             return DetailsByCityResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"Ошибка получения деталей обращений по городу: {e}")
+            logger.error(
+                f"[Обращения] Ошибка получения деталей обращений по городу: {e}"
+            )
             return None
 
     async def get_details_by_problem(
@@ -139,5 +143,7 @@ class AppealsAPI(BaseAPI):
             data = await response.json()
             return DetailsByProblemResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"Ошибка получения деталей обращений по проблеме: {e}")
+            logger.error(
+                f"[Обращения] Ошибка получения деталей обращений по проблеме: {e}"
+            )
             return None

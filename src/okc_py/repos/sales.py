@@ -1,8 +1,11 @@
+import logging
 from typing import Any
 
 from ..client import Client
 from ..models.sales import SalesFilters, SalesFiltersByDate, SalesReport
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class SalesAPI(BaseAPI):
@@ -23,7 +26,8 @@ class SalesAPI(BaseAPI):
         try:
             result = await response.json()
             return SalesFilters.model_validate(result)
-        except Exception:
+        except Exception as e:
+            logger.error(f"[Продажи] Ошибка получения фильтров: {e}")
             return None
 
     async def get_filters_by_date(
@@ -47,7 +51,8 @@ class SalesAPI(BaseAPI):
         try:
             result = await response.json()
             return SalesFiltersByDate.model_validate(result)
-        except Exception:
+        except Exception as e:
+            logger.error(f"[Продажи] Ошибка получения фильтров по дате: {e}")
             return None
 
     async def get_report(
@@ -100,5 +105,6 @@ class SalesAPI(BaseAPI):
         try:
             result: Any = await response.json()
             return SalesReport.model_validate(result[0])
-        except Exception:
+        except Exception as e:
+            logger.error(f"[Продажи] Ошибка получения отчета: {e}")
             return None

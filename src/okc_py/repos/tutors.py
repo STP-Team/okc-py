@@ -15,6 +15,33 @@ class TutorsAPI(BaseAPI):
         super().__init__(client)
         self.service_url = "tutor-graph/tutor-api"
 
+    async def get_filters(self, division_id: int) -> GraphFiltersResponse | None:
+        """
+        Get graph filters data including all tutors, units, shift types, and tutor types.
+
+        Returns:
+            GraphFiltersResponse containing lists of tutors, units, shift types, and tutor types
+        """
+        form_data = [("divisionId", str(division_id))]
+
+        # Override headers for form data
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+        response = await self.post(
+            f"{self.service_url}/get-graph-filters", data=form_data, headers=headers
+        )
+
+        if response.status != 200:
+            return None
+
+        try:
+            data = await response.json()
+            graph_filters = GraphFiltersResponse.model_validate(data)
+            return graph_filters
+        except Exception as e:
+            logger.error(f"[Наставники] Ошибка получения фильтров графика: {e}")
+            return None
+
     async def get_full_graph(
         self,
         division_id: int,
@@ -74,39 +101,7 @@ class TutorsAPI(BaseAPI):
 
         try:
             data = await response.json()
-            # Log the API response for debugging
-            if "error" in data:
-                logger.error(f"[Tutors] API вернул ошибку: {data}")
-                return None
-            tutor_graph = TutorGraphResponse.model_validate(data)
-            return tutor_graph
+            return TutorGraphResponse.model_validate(data)
         except Exception as e:
-            logger.error(f"[Tutors] Ошибка получения графика наставников: {e}")
-            return None
-
-    async def get_graph_filters(self, division_id: int) -> GraphFiltersResponse | None:
-        """
-        Get graph filters data including all tutors, units, shift types, and tutor types.
-
-        Returns:
-            GraphFiltersResponse containing lists of tutors, units, shift types, and tutor types
-        """
-        form_data = [("divisionId", str(division_id))]
-
-        # Override headers for form data
-        headers = {"Content-Type": "application/x-www-form-urlencoded"}
-
-        response = await self.post(
-            f"{self.service_url}/get-graph-filters", data=form_data, headers=headers
-        )
-
-        if response.status != 200:
-            return None
-
-        try:
-            data = await response.json()
-            graph_filters = GraphFiltersResponse.model_validate(data)
-            return graph_filters
-        except Exception as e:
-            logger.error(f"[Tutors] Ошибка получения фильтров графика: {e}")
+            logger.error(f"[Наставники] Ошибка получения графика наставников: {e}")
             return None

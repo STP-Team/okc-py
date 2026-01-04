@@ -35,7 +35,7 @@ class TestsAPI(BaseAPI):
             tests = adapter.validate_python(data)
             return tests
         except Exception as e:
-            logger.error(f"[Tests] Error parsing tests: {e}")
+            logger.error(f"[Тесты] Ошибка получения тестов: {e}")
             return None
 
     async def get_assigned_tests(
@@ -87,7 +87,7 @@ class TestsAPI(BaseAPI):
             tests = adapter.validate_python(data)
             return tests
         except Exception as e:
-            logger.error(f"[Tests] Error parsing assigned tests: {e}")
+            logger.error(f"[Тесты] Ошибка получения назначенных тестов: {e}")
             return None
 
     async def get_themes(self) -> list[TestDetailedTheme] | None:
@@ -102,7 +102,7 @@ class TestsAPI(BaseAPI):
             themes = adapter.validate_python(data)
             return themes
         except Exception as e:
-            logger.error(f"[Tests] Error parsing themes: {e}")
+            logger.error(f"[Тесты] Ошибка получения тем: {e}")
             return None
 
     async def get_categories(self) -> list[TestCategory] | None:
@@ -117,7 +117,7 @@ class TestsAPI(BaseAPI):
             categories = adapter.validate_python(data)
             return categories
         except Exception as e:
-            logger.error(f"[Tests] Error parsing categories response: {e}")
+            logger.error(f"[Тесты] Ошибка получения категорий: {e}")
             return None
 
     async def get_users(self) -> list[TestsUser] | None:
@@ -132,7 +132,7 @@ class TestsAPI(BaseAPI):
             users = adapter.validate_python(data)
             return users
         except Exception as e:
-            logger.error(f"[Tests] Error parsing users response: {e}")
+            logger.error(f"[Тесты] Ошибка получения пользователей: {e}")
             return None
 
     async def get_supervisors(self) -> list[TestsSupervisor] | None:
@@ -147,7 +147,7 @@ class TestsAPI(BaseAPI):
             supervisors = adapter.validate_python(data)
             return supervisors
         except Exception as e:
-            logger.error(f"[Tests] Error parsing supervisors response: {e}")
+            logger.error(f"[Тесты] Ошибка получения супервайзеров: {e}")
             return None
 
     async def get_subdivisions(self) -> list[TestsSubdivision] | None:
@@ -162,5 +162,5 @@ class TestsAPI(BaseAPI):
             subdivisions = adapter.validate_python(data)
             return subdivisions
         except Exception as e:
-            logger.error(f"[Tests] Error parsing subdivisions response: {e}")
+            logger.error(f"[Тесты] Ошибка получения направлений: {e}")
             return None

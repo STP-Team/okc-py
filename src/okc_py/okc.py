@@ -7,6 +7,7 @@ from .config import Settings
 from .exceptions import ConfigurationError
 from .repos import DossierAPI, PremiumAPI, SlAPI, TestsAPI, TutorsAPI, UreAPI
 from .repos.appeals import AppealsAPI
+from .repos.incidents import IncidentsAPI
 from .repos.sales import SalesAPI
 
 logger = logging.getLogger(__name__)
@@ -83,6 +84,7 @@ class OKC:
         self.tutors: TutorsAPI | None = None
         self.appeals: AppealsAPI | None = None
         self.sales: SalesAPI | None = None
+        self.incidents: IncidentsAPI | None = None
 
         logger.info("OKC API client initialized")
 
@@ -111,6 +113,7 @@ class OKC:
         self.tutors = TutorsAPI(self.client)
         self.appeals = AppealsAPI(self.client)
         self.sales = SalesAPI(self.client)
+        self.incidents = IncidentsAPI(self.client)
 
         logger.info("OKC API repositories initialized")
 

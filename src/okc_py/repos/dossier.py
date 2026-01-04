@@ -39,7 +39,7 @@ class DossierAPI(BaseAPI):
 
             return employees
         except Exception as e:
-            logger.error(f"Ошибка получения списка специалистов: {e}")
+            logger.error(f"[Профайл] Ошибка получения списка специалистов: {e}")
             return None
 
     async def get_employee(
@@ -87,5 +87,5 @@ class DossierAPI(BaseAPI):
             employee = EmployeeData.model_validate(data)
             return employee
         except Exception as e:
-            logger.error(f"Ошибка получения специалиста: {e}")
+            logger.error(f"[Профайл] Ошибка получения специалиста: {e}")
             return None
