@@ -23,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 class UreAPI(BaseAPI):
+    """Взаимодействия с API URE."""
+
     unites = {
         "НТП1": 5,
         "НТП2": 6,
@@ -64,7 +66,6 @@ class UreAPI(BaseAPI):
     def __init__(self, client: Client):
         super().__init__(client)
         self.service_url = "ure"
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     @staticmethod
     def _get_report_model(report_type: str) -> type[KPIDataRecord]:

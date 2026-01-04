@@ -1,9 +1,12 @@
-from loguru import logger
+import logging
+
 from pydantic import TypeAdapter
 
 from ..client import Client
 from ..models.dossier import Employee, EmployeeData
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class DossierAPI(BaseAPI):

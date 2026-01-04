@@ -1,0 +1,38 @@
+import asyncio
+
+from okc_py import OKC
+
+
+async def main():
+    async with OKC(username="YOUR_USERNAME", password="YOUR_PASSWORD") as client:
+        filters = await client.sales.get_filters()
+        print(f"Filters: {filters}")
+
+        filters_by_date = await client.sales.get_filters_by_date(
+            "1.12.2025", "1.1.2026"
+        )
+        for head in filters_by_date.heads:
+            print(
+                f"{head.name} - Unit: {head.unit_id},"
+                f" Subdivision: {head.subdivision_id}"
+            )
+        for emp in filters_by_date.employees:
+            print(f"{emp.name} - Head: {emp.head_id}, Active to: {emp.active_to}")
+
+        sales = await client.sales.get_report(
+            sales_types=["SaleMaterialsEns", "SaleTestDrive", "SalePPDRequests"],
+            units=[7],
+            start_date="01.12.2025",
+            stop_date="05.01.2026",
+        )
+
+        for sale in sales.data:
+            print(
+                f"{sale.fullname} ({sale.unit_name}):"
+                f" {sale.materials_ens_name} in {sale.cost_type}"
+                f" at {sale.sale_date} with base cost {sale.base_cost}Р"
+            )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

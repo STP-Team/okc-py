@@ -1,17 +1,18 @@
 """Async HTTP client with OKC API authentication and error handling."""
 
 import asyncio
+import logging
 import time
-from sys import stderr
 from typing import Any
 
 import aiohttp
 from aiohttp import ClientError, ClientSession, ClientTimeout
-from loguru import logger
 
 from .auth import authenticate
-from .config import Settings
+from .config import Settings, setup_logging
 from .exceptions import AuthenticationError, NetworkError
+
+logger = logging.getLogger(__name__)
 
 
 class Client:
@@ -38,12 +39,7 @@ class Client:
         self._last_request_time = 0.0
 
         # Setup logging
-        logger.remove()
-        logger.add(
-            stderr,
-            format=self.settings.LOG_FORMAT,
-            level=self.settings.LOG_LEVEL,
-        )
+        setup_logging(self.settings.LOG_LEVEL)
 
     async def __aenter__(self):
         """Async context manager entry - creates session."""

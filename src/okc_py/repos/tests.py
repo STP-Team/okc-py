@@ -1,6 +1,6 @@
+import logging
 from urllib.parse import urlencode
 
-from loguru import logger
 from pydantic import TypeAdapter
 
 from ..client import Client
@@ -14,6 +14,8 @@ from ..models.tests import (
     TestsUser,
 )
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class TestsAPI(BaseAPI):

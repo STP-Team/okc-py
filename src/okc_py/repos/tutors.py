@@ -1,11 +1,11 @@
 import logging
 from urllib.parse import urlencode
 
-from loguru import logger
-
 from ..client import Client
 from ..models.tutors import GraphFiltersResponse, TutorGraphResponse
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class TutorsAPI(BaseAPI):
@@ -14,7 +14,6 @@ class TutorsAPI(BaseAPI):
     def __init__(self, client: Client):
         super().__init__(client)
         self.service_url = "tutor-graph/tutor-api"
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def get_full_graph(
         self,

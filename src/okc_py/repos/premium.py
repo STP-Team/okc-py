@@ -1,10 +1,10 @@
 import logging
 
-from loguru import logger
-
 from ..client import Client
 from ..models.premium import HeadPremiumResponse, SpecialistPremiumResponse
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class PremiumAPI(BaseAPI):
@@ -13,7 +13,6 @@ class PremiumAPI(BaseAPI):
     def __init__(self, client: Client):
         super().__init__(client)
         self.service_url = "premium"
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def get_specialist_premium(
         self,

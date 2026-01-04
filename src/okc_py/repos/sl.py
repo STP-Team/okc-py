@@ -1,10 +1,10 @@
 import logging
 
-from loguru import logger
-
 from ..client import Client
 from ..models.sl import ReportData, SlRootModel
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class SlAPI(BaseAPI):
@@ -13,7 +13,6 @@ class SlAPI(BaseAPI):
     def __init__(self, client: Client):
         super().__init__(client)
         self.service_url = "genesys/ntp"
-        self.logger = logging.getLogger(self.__class__.__name__)
 
     async def get_vq_chat_filter(self) -> SlRootModel | None:
         """Получает доступные фильтры статистики SL.

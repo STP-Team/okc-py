@@ -1,4 +1,4 @@
-from loguru import logger
+import logging
 
 from ..client import Client
 from ..models.appeals import (
@@ -9,6 +9,8 @@ from ..models.appeals import (
     FiltersResponse,
 )
 from .base import BaseAPI
+
+logger = logging.getLogger(__name__)
 
 
 class AppealsAPI(BaseAPI):

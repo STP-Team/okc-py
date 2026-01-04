@@ -1,9 +1,11 @@
+import logging
 import re
 
 from aiohttp import ClientSession
-from loguru import logger
 
 from .exceptions import CSRFError, InvalidCredentialsError
+
+logger = logging.getLogger(__name__)
 
 
 def _get_base_headers(base_url: str) -> dict[str, str]:

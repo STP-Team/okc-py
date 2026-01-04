@@ -1,12 +1,15 @@
 """Main OKC API wrapper class."""
 
-from loguru import logger
+import logging
 
 from .client import Client
 from .config import Settings
 from .exceptions import ConfigurationError
 from .repos import DossierAPI, PremiumAPI, SlAPI, TestsAPI, TutorsAPI, UreAPI
 from .repos.appeals import AppealsAPI
+from .repos.sales import SalesAPI
+
+logger = logging.getLogger(__name__)
 
 
 class OKC:
@@ -79,6 +82,7 @@ class OKC:
         self.tests: TestsAPI | None = None
         self.tutors: TutorsAPI | None = None
         self.appeals: AppealsAPI | None = None
+        self.sales: SalesAPI | None = None
 
         logger.info("OKC API client initialized")
 
@@ -106,6 +110,7 @@ class OKC:
         self.tests = TestsAPI(self.client)
         self.tutors = TutorsAPI(self.client)
         self.appeals = AppealsAPI(self.client)
+        self.sales = SalesAPI(self.client)
 
         logger.info("OKC API repositories initialized")
 

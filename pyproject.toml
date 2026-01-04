@@ -1,6 +1,6 @@
 [project]
 name = "okc-py"
-version = "1.1.0"
+version = "1.2.0"
 description = "Asynchronous Python wrapper for the OKC API"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.13"
@@ -33,7 +33,6 @@ classifiers = [
 
 dependencies = [
     "aiohttp[speedups]>=3.13.2",
-    "loguru>=0.7.3",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
 ]
