@@ -1,6 +1,7 @@
 """Main OKC API wrapper class."""
 
 import logging
+from typing import TYPE_CHECKING, Self
 
 from .client import Client
 from .config import Settings
@@ -12,6 +13,21 @@ from .sockets.repos.breaks import (
 )
 from .sockets.repos.lines import LINE_NAMESPACES, LineNamespace, LineWSClient
 
+if TYPE_CHECKING:
+    from .api import (
+        DossierAPI,
+        PremiumAPI,
+        SlAPI,
+        TestsAPI,
+        TutorsAPI,
+        UreAPI,
+    )
+    from .api.repos.appeals import AppealsAPI
+    from .api.repos.incidents import IncidentsAPI
+    from .api.repos.lines import LinesAPI
+    from .api.repos.lk import LkAPI
+    from .api.repos.sales import SalesAPI
+
 logger = logging.getLogger(__name__)
 
 
@@ -20,6 +36,19 @@ class _APIRouter:
 
     Provides access to all HTTP API repositories.
     """
+
+    # Type hints for IDE autocomplete
+    dossier: "DossierAPI"
+    premium: "PremiumAPI"
+    ure: "UreAPI"
+    sl: "SlAPI"
+    tests: "TestsAPI"
+    tutors: "TutorsAPI"
+    appeals: "AppealsAPI"
+    sales: "SalesAPI"
+    incidents: "IncidentsAPI"
+    lines: "LinesAPI"
+    lk: "LkAPI"
 
     def __init__(self, client: Client):
         """Initialize API router.
@@ -273,22 +302,9 @@ class OKC:
         self._api = _APIRouter(self.client)
         self._ws = _WSRouter(self.client)
 
-        # Keep old properties for backward compatibility (deprecated)
-        self.dossier = None
-        self.premium = None
-        self.ure = None
-        self.sl = None
-        self.tests = None
-        self.tutors = None
-        self.appeals = None
-        self.sales = None
-        self.incidents = None
-        self.lines = None
-        self.lk = None
-
         logger.info("OKC API client initialized")
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         """Async context manager entry - creates session and authenticates."""
         await self.connect()
         return self
@@ -307,18 +323,6 @@ class OKC:
         # Initialize API router (creates all repositories)
         self._api._ensure_initialized()
 
-        # For backward compatibility, set direct properties
-        self.dossier = self._api.dossier
-        self.premium = self._api.premium
-        self.ure = self._api.ure
-        self.sl = self._api.sl
-        self.tests = self._api.tests
-        self.tutors = self._api.tutors
-        self.appeals = self._api.appeals
-        self.sales = self._api.sales
-        self.incidents = self._api.incidents
-        self.lines = self._api.lines
-
         logger.info("OKC API repositories initialized")
 
     async def close(self):
@@ -327,16 +331,6 @@ class OKC:
         Note: This is called automatically when using the async context manager.
         """
         await self.client.close()
-        self.dossier = None
-        self.premium = None
-        self.ure = None
-        self.sl = None
-        self.tests = None
-        self.tutors = None
-        self.appeals = None
-        self.sales = None
-        self.incidents = None
-        self.lines = None
 
     @property
     def is_connected(self) -> bool:

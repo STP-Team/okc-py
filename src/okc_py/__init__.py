@@ -2,7 +2,6 @@
 # Core components (for advanced users)
 # API classes (for advanced users who want direct access)
 from .api import DossierAPI, PremiumAPI, SlAPI, TestsAPI, TutorsAPI, UreAPI
-from .client import Client
 from .config import Settings
 
 # All exceptions
@@ -27,7 +26,6 @@ __all__ = [
     # Main client
     "OKC",
     # Core components
-    "Client",
     "Settings",
     # Exceptions
     "OKCError",

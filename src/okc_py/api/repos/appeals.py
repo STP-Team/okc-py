@@ -1,6 +1,6 @@
 import logging
 
-from ... import Client
+from ...client import Client
 from ..models.appeals import (
     AppealsByCityResponse,
     AppealsByProblemResponse,

@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from ... import Client
+from ...client import Client
 
 
 class _ResponseWrapper:
