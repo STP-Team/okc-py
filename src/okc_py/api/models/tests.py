@@ -81,3 +81,32 @@ class TestsSupervisor(BaseModel):
     head: str | None = Field(description="Идентификатор вышестоящего руководителя")
     subdivision: str = Field(description="Идентификатор подразделения")
     unit: str | None = Field(description="Идентификатор подразделения")
+
+
+class TestsStat(BaseModel):
+    """Модель статистики прохождения тестов."""
+
+    model_config = {"populate_by_name": True}
+
+    id: str = Field(description="Идентификатор записи")
+    assign_date: str = Field(alias="assignDate", description="Дата назначения теста")
+    start: str = Field(description="Дата и время начала теста")
+    end: str = Field(description="Дата и время окончания теста")
+    duration: str = Field(description="Длительность в секундах")
+    status: str = Field(description="Статус теста")
+    status_id: str = Field(alias="statusId", description="Идентификатор статуса")
+    test: str = Field(description="Название теста")
+    question_count: str = Field(
+        alias="questionCount", description="Количество вопросов"
+    )
+    correct_count: str = Field(
+        alias="correctCount", description="Количество правильных ответов"
+    )
+    success_percent: str = Field(
+        alias="successPercent", description="Процент успешности"
+    )
+    user: str = Field(description="ФИО пользователя")
+    head: str | None = Field(description="ФИО руководителя")
+    subdivision: str = Field(description="Подразделение")
+    score: str = Field(description="Оценка")
+    passed: str = Field(description="Пройден (1 - да, 0 - нет)")

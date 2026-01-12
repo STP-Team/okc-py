@@ -9,6 +9,7 @@ from ..models.tests import (
     Test,
     TestCategory,
     TestDetailedTheme,
+    TestsStat,
     TestsSubdivision,
     TestsSupervisor,
     TestsUser,
@@ -163,4 +164,52 @@ class TestsAPI(BaseAPI):
             return subdivisions
         except Exception as e:
             logger.error(f"[Тесты] Ошибка получения направлений: {e}")
+            return None
+
+    async def get_stats(
+        self,
+        start_date: str,
+        end_date: str,
+    ) -> list[TestsStat] | None:
+        """
+        Получить статистику прохождения тестов.
+
+        Args:
+            start_date: Дата начала в формате DD.MM.YYYY
+            end_date: Дата окончания в формате DD.MM.YYYY
+
+        Returns:
+            Список статистики или None в случае ошибки
+        """
+        adapter = TypeAdapter(list[TestsStat])
+
+        # Подготовка данных формы в URL-encoded формате
+        form_params = [
+            ("startDate", start_date),
+            ("stopDate", end_date),
+        ]
+
+        # Кодируем данные в URL-encoded формат
+        encoded_data = urlencode(form_params)
+
+        # Заголовки для form-encoded запроса
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+        }
+
+        # Отправляем POST запрос с данными формы
+        response = await self.post(
+            f"{self.service_url}/get-stats-result",
+            data=encoded_data.encode("utf-8"),
+            headers=headers,
+        )
+
+        try:
+            data = await response.json()
+            stats = adapter.validate_python(data)
+            return stats
+        except Exception as e:
+            logger.error(f"[Тесты] Ошибка получения статистики: {e}")
             return None
