@@ -19,10 +19,11 @@ async def main():
             start_date="01.12.2025",
             stop_date="01.01.2026",
         )
-        for incident in incidents:
-            print(
-                f"{incident.scale} - {incident.start_date}: {incident.product} - {incident.description[:50]}..."
-            )
+        if incidents:
+            for incident in incidents:
+                print(
+                    f"{incident.scale} - {incident.start_date}: {incident.product} - {incident.description[:50]}..."
+                )
 
 
 if __name__ == "__main__":

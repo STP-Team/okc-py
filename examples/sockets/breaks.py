@@ -70,7 +70,7 @@ def _on_page_data(data: PageData | SimplePageData) -> None:
 
         # Для ntp_nck пространства имен также показываем разгрузки
         if hasattr(line_data, "get_discharge_users"):
-            discharge_users = line_data.get_discharge_users()  # type: ignore[attr-defined]
+            discharge_users = line_data.get_discharge_users()
             if discharge_users:
                 print(f"\n  📦 На разгрузке ({len(discharge_users)}):")
                 for user in discharge_users:

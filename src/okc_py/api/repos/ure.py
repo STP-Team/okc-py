@@ -82,7 +82,9 @@ class UreAPI(BaseAPI):
         }
         return report_models.get(report_type, GenericKPIDataRecord)
 
-    def _parse_response(self, data: dict, report_type: str) -> TypedKPIResponse | None:
+    def _parse_response(
+        self, data: dict | None, report_type: str
+    ) -> TypedKPIResponse | None:
         """Parse API response data into typed KPI response."""
         if not data:
             return None

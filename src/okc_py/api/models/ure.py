@@ -197,7 +197,10 @@ class GenericKPIDataRecord(BaseKPIRecord):
         known_fields = set(self.model_fields.keys())
         base_data = {k: v for k, v in data.items() if k in known_fields}
         additional_data = {k: v for k, v in data.items() if k not in known_fields}
-        super().__init__(**base_data, additional_fields=additional_data)
+        # Initialize base fields first
+        super().__init__(**base_data)
+        # Then set additional_fields directly
+        object.__setattr__(self, "additional_fields", additional_data)
 
 
 class HeaderDefinition(BaseModel):

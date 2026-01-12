@@ -18,15 +18,15 @@ async def main():
         filters_by_date = await client.api.sales.get_filters_by_date(
             "1.12.2025", "1.1.2026"
         )
-        for head in filters_by_date.heads:
-            print(
-                f"{head.employee_fullname} - Unit: {head.unit_id},"
-                f" Subdivision: {head.subdivision_id}"
-            )
-        for emp in filters_by_date.employees:
-            print(
-                f"{emp.employee_fullname} - Head: {emp.head_id}, Active to: {emp.active_to}"
-            )
+        if filters_by_date and filters_by_date.heads:
+            for head in filters_by_date.heads:
+                print(
+                    f"{head.name} - Unit: {head.unit_id},"
+                    f" Subdivision: {head.subdivision_id}"
+                )
+        if filters_by_date and filters_by_date.employees:
+            for emp in filters_by_date.employees:
+                print(f"{emp.name} - Head: {emp.head_id}, Active to: {emp.active_to}")
 
         sales = await client.api.sales.get_report(
             sales_types=["SaleMaterialsEns", "SaleTestDrive", "SalePPDRequests"],
@@ -35,12 +35,13 @@ async def main():
             stop_date="05.01.2026",
         )
 
-        for sale in sales.data:
-            print(
-                f"{sale.employee_fullname} ({sale.unit_name}):"
-                f" {sale.materials_ens_name} in {sale.cost_type}"
-                f" at {sale.sale_date} with base cost {sale.base_cost}Р"
-            )
+        if sales and sales.data:
+            for sale in sales.data:
+                print(
+                    f"{sale.fullname} ({sale.unit_name}):"
+                    f" {sale.materials_ens_name} in {sale.cost_type}"
+                    f" at {sale.sale_date} with base cost {sale.base_cost}Р"
+                )
 
 
 if __name__ == "__main__":

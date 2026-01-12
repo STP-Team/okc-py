@@ -17,19 +17,25 @@ async def main():
         print(f"Graph filters: {graph_filters}")
 
         # Получить график наставников за промежуток времени
-        tutor_graph = await client.api.tutors.get_full_graph(
-            division_id=2,
-            start_date="1.12.2025",
-            stop_date="1.1.2026",
-            picked_units=[unit.id for unit in graph_filters.units],
-            picked_tutor_types=[
-                tutor_type.id for tutor_type in graph_filters.tutor_types
-            ],
-            picked_shift_types=[
-                shift_type.id for shift_type in graph_filters.shift_types
-            ],
-        )
-        print(f"Tutors schedule: {tutor_graph}")
+        if (
+            graph_filters
+            and graph_filters.units
+            and graph_filters.tutor_types
+            and graph_filters.shift_types
+        ):
+            tutor_graph = await client.api.tutors.get_full_graph(
+                division_id=2,
+                start_date="1.12.2025",
+                stop_date="1.1.2026",
+                picked_units=[unit.id for unit in graph_filters.units],
+                picked_tutor_types=[
+                    tutor_type.id for tutor_type in graph_filters.tutor_types
+                ],
+                picked_shift_types=[
+                    shift_type.id for shift_type in graph_filters.shift_types
+                ],
+            )
+            print(f"Tutors schedule: {tutor_graph}")
 
 
 if __name__ == "__main__":

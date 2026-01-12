@@ -29,7 +29,7 @@ async def main():
         print(f"Daily KPI: {day_report}")
 
         # Показатели за последнюю неделю
-        week_report = await client.ure.get_week_kpi(
+        week_report = await client.api.ure.get_week_kpi(
             division=division, report=report_type
         )
         print(f"Weekly KPI: {week_report}")

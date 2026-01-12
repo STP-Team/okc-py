@@ -1,6 +1,9 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field, model_validator
+
+if TYPE_CHECKING:
+    from pydantic import ExtraValues
 
 
 class BasePremiumData(BaseModel):
@@ -108,16 +111,42 @@ class SpecialistPremiumResponse(BaseModel):
     items: list[SpecialistPremiumData] = Field(...)
 
     @classmethod
-    def model_validate(cls, data):
+    def model_validate(
+        cls,
+        obj: Any,
+        *,
+        strict: bool | None = None,
+        extra: "ExtraValues | None" = None,  # type: ignore[valid-type]
+        from_attributes: bool | None = None,
+        context: Any | None = None,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ):
         """Validate from API response data"""
-        if isinstance(data, list):
+        if isinstance(obj, list):
             # If data is a list, wrap it in the items field
             return cls(
-                items=[SpecialistPremiumData.model_validate(item) for item in data]
+                items=[SpecialistPremiumData.model_validate(item) for item in obj]
             )
-        elif isinstance(data, dict) and "items" in data:
+        elif isinstance(obj, dict) and "items" in obj:
             # If data already has items field
-            return super().model_validate(data)
+            return super().model_validate(
+                obj,
+                strict=strict,
+                extra=extra,
+                from_attributes=from_attributes,
+                context=context,
+                by_alias=by_alias,
+                by_name=by_name,
+            )
         else:
             # Fallback to standard validation
-            return super().model_validate(data)
+            return super().model_validate(
+                obj,
+                strict=strict,
+                extra=extra,
+                from_attributes=from_attributes,
+                context=context,
+                by_alias=by_alias,
+                by_name=by_name,
+            )

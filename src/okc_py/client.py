@@ -140,6 +140,11 @@ class Client:
         # Apply rate limiting
         await self._rate_limit()
 
+        # Store session to narrow type from ClientSession | None to ClientSession
+        # We know it's not None because we just connected above
+        session = self._session
+        assert session is not None  # Type: ignore[assert-type]
+
         # Retry logic
         last_exception = None
         for attempt in range(self.settings.MAX_RETRIES + 1):
@@ -149,15 +154,17 @@ class Client:
                 if json is not None:
                     req_kwargs["json"] = json
                     # Ensure proper headers for JSON requests
-                    req_kwargs.setdefault("headers", {})["Accept"] = (
-                        "application/json, text/plain, */*"
-                    )
+                    headers = req_kwargs.setdefault("headers", {})
+                    if headers is None:
+                        headers = {}
+                        req_kwargs["headers"] = headers
+                    headers["Accept"] = "application/json, text/plain, */*"
                     logger.debug(f"Request: {method} {url} | JSON: {json}")
                 else:
                     req_kwargs["data"] = data
                     logger.debug(f"Request: {method} {url} | Data: {data}")
 
-                async with self._session.request(method, url, **req_kwargs) as response:
+                async with session.request(method, url, **req_kwargs) as response:
                     # Check for rate limiting
                     if response.status == 429:
                         retry_after = float(

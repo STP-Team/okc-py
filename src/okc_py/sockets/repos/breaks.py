@@ -59,7 +59,7 @@ class BreaksWSClient(BaseWS):
         ```
     """
 
-    def __init__(self, client: Client, namespace: BreakNamespace = "ntp-nck") -> None:
+    def __init__(self, client: Client, namespace: BreakNamespace = "ntp_nck") -> None:
         """Initialize Breaks WebSocket client.
 
         Args:
