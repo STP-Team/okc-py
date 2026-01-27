@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
     from pydantic import ExtraValues
@@ -29,14 +29,9 @@ class BasePremiumData(BaseModel):
     # ГОК
     gok: float = Field(..., alias="GOK")
     gok_normative: float | None = Field(None, alias="GOK_NORMATIVE")
+    gok_pers_normative: float | None = Field(None, alias="PERS_GOK_NORMATIVE")
     gok_normative_rate: float | None = Field(None, alias="NORM_GOK")
-    gok_premium: int = Field(..., alias="PERC_GOK")
-
-    # FLR
-    flr: float = Field(..., alias="FLR")
-    flr_normative: float | None = Field(None, alias="FLR_NORMATIVE")
-    flr_normative_rate: float | None = Field(None, alias="NORM_FLR")
-    flr_premium: int = Field(..., alias="PERC_FLR")
+    gok_premium: float = Field(..., alias="PERC_GOK")
 
     # Спец. цель
     pers_target_type_id: int | None = Field(None, alias="PERS_TARGET_TYPE_ID")
@@ -58,51 +53,47 @@ class BasePremiumData(BaseModel):
 class SpecialistPremiumData(BasePremiumData):
     """Model for specialist premium data"""
 
-    # Оценка
-    csi: float = Field(..., alias="CSI")
-    csi_normative: float | None = Field(None, alias="CSI_NORMATIVE")
-    csi_normative_rate: float | None = Field(None, alias="NORM_CSI")
-    csi_premium: int = Field(..., alias="PERC_CSI")
+    # CSAT (Customer Satisfaction)
+    csat: float | None = Field(None, alias="CSAT")
+    csat_normative: float | None = Field(None, alias="CSAT_NORMATIVE")
+    csat_pers_normative: float | None = Field(None, alias="PERS_CSAT_NORMATIVE")
+    csat_normative_rate: float | None = Field(None, alias="NORM_CSAT")
+    csat_premium: float | None = Field(None, alias="PERC_CSAT")
 
-    # Отклик
-    csi_response: float | None = Field(None, alias="CSI_RESPONSE")
-    csi_response_normative: float | None = Field(None, alias="CSI_RESPONSE_NORMATIVE")
-    csi_response_normative_rate: float | None = Field(None, alias="NORM_CSI_RESPONSE")
-
-    # Прочие показатели
-    discipline_premium: int = Field(..., alias="PERC_DISCIPLINE")
-    tests_premium: int = Field(..., alias="PERC_TESTING")
-    thanks_premium: int = Field(..., alias="PERC_THANKS")
-    tutors_premium: float = Field(..., alias="PERC_TUTORS")
+    # AHT (Average Handle Time)
+    aht: float | None = Field(None, alias="AHT")
+    aht_normative: float | None = Field(None, alias="AHT_NORMATIVE")
+    aht_pers_normative: float | None = Field(None, alias="PERS_AHT_NORMATIVE")
+    aht_normative_rate: float | None = Field(None, alias="NORM_AHT")
+    aht_premium: float | None = Field(None, alias="PERC_AHT")
 
     # Специфичные для специалистов поля
-    total_contacts: int = Field(...)
-
-    @model_validator(mode="before")
-    @classmethod
-    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
-        for key in ("TOTAL_CHATS", "TOTAL_CALLS"):
-            if key in values:
-                values["total_contacts"] = values[key]
-                break
-        return values
+    total_chats: int | None = Field(None, alias="TOTAL_CHATS")
 
 
 class HeadPremiumData(BasePremiumData):
     """Model for head (supervisor) premium data"""
 
-    sl: float | None = Field(None, alias="SL_FACT")
-    sl_normative_first: float | None = Field(None, alias="SL_PLAN_1")
-    sl_normative_second: float | None = Field(None, alias="SL_PLAN_2")
-    sl_normative_rate_first: float | None = Field(None, alias="SL_RESULT_1")
-    sl_normative_rate_second: float | None = Field(None, alias="SL_RESULT_2")
-    sl_premium: int = Field(..., alias="SL_PERCENT")
+    # FLR (First Line Resolution)
+    flr: float | None = Field(None, alias="FLR")
+    flr_normative: float | None = Field(None, alias="FLR_NORMATIVE")
+    flr_pers_normative: float | None = Field(None, alias="PERS_FLR_NORMATIVE")
+    flr_normative_rate: float | None = Field(None, alias="NORM_FLR")
+    flr_premium: float | None = Field(None, alias="PERC_FLR")
+
+    # AHT (Average Handle Time)
+    aht: float | None = Field(None, alias="AHT")
+    aht_normative: float | None = Field(None, alias="AHT_NORMATIVE")
+    aht_pers_normative: float | None = Field(None, alias="PERS_AHT_NORMATIVE")
+    aht_normative_rate: float | None = Field(None, alias="NORM_AHT")
+    aht_premium: float | None = Field(None, alias="PERC_AHT")
 
 
 class HeadPremiumResponse(BaseModel):
     """Wrapper for head premium response with not eligible employees"""
 
     premium: list[HeadPremiumData] = Field(...)
+    not_eligible: dict[str, list[str]] = Field(..., alias="notEligible")
 
 
 class SpecialistPremiumResponse(BaseModel):
