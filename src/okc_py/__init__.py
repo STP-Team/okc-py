@@ -2,6 +2,7 @@
 # Core components (for advanced users)
 # API classes (for advanced users who want direct access)
 from .api import DossierAPI, PremiumAPI, SlAPI, TestsAPI, TutorsAPI, UreAPI
+from .api.repos.thanks import ThanksAPI
 from .config import Settings
 
 # All exceptions
@@ -46,6 +47,7 @@ __all__ = [
     "SlAPI",
     "TutorsAPI",
     "TestsAPI",
+    "ThanksAPI",
     # Version
     "__version__",
 ]
