@@ -44,35 +44,20 @@ class DossierAPI(BaseAPI):
 
     async def get_employee(
         self,
-        employee_id: int | None = None,
-        employee_fullname: str | None = None,
+        employee_id: int = None,
         show_kpi: bool = True,
         show_criticals: bool = True,
     ) -> EmployeeData | None:
-        """Получает сотрудника по ФИО или идентификатору.
+        """Получает сотрудника по идентификатору.
 
         Args:
             employee_id: Идентификатор сотрудника на OKC
-            employee_fullname: ФИО сотрудника
             show_kpi: Получать ли показатели сотрудника
             show_criticals: Получать ли критические ошибки сотрудника
 
         Returns:
             Информация о сотруднике, если найден, иначе None
         """
-        if employee_id is None and employee_fullname:
-            employees = await self.get_employees()
-            if not employees:
-                return None
-
-            for employee in employees:
-                if employee.fullname == employee_fullname:
-                    employee_id = employee.id
-                    break
-
-        if employee_id is None:
-            return None
-
         response = await self.post(
             endpoint=f"{self.service_url}/get-dossier",
             json={
