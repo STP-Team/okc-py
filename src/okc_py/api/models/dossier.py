@@ -16,8 +16,12 @@ class EmployeeInfo(BaseModel):
     division: str = Field(
         alias="SUBDIVISION_NAME", description="Направление сотрудника"
     )
-    unit_id: str = Field(alias="UNIT_ID", description="Идентификатор направления")
-    unit_name: str = Field(alias="UNIT_NAME", description="Название направления")
+    unit_id: str | None = Field(
+        default=None, alias="UNIT_ID", description="Идентификатор направления"
+    )
+    unit_name: str | None = Field(
+        default=None, alias="UNIT_NAME", description="Название направления"
+    )
     head_fullname: str | None = Field(
         alias="HEAD_NAME", description="ФИО руководителя сотрудника"
     )
