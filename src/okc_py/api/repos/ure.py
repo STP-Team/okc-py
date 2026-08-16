@@ -33,37 +33,37 @@ class UreAPI(BaseAPI):
     }
     reports = {
         "НТП1": {
-            "CSAT": 95,
+            "CSAT": 95, # С правками
             "AHT": 16,
             "FLR": 59,  # С правками - 59, без - 23
-            "CSI": 12,  # С правками - 12, без - 33
+            #"CSI": 12,  # С правками - 12, без - 33
             "POK": 8,  # С правками - 8, без - 34
             "DELAY": 39,  # Используется нерабочее время
-            "Sales": 61,
+            "Sales": 97,
             "SalesPotential": 69,
-            "PaidService": 62,
+            "PaidService": 105,
         },
         "НТП2": {
-            "CSAT": 95,
+            "CSAT": 95, # С правками
             "AHT": 16,
             "FLR": 36,  # С правками - 36, без - 24
-            "CSI": 12,  # С правками - 12, без - 33
+            #"CSI": 12,  # С правками - 12, без - 33
             "POK": 8,  # С правками - 8, без - 34
             "DELAY": 39,  # Используется нерабочее время
-            "Sales": 61,
+            "Sales": 108,
             "SalesPotential": 69,
-            "PaidService": 64,
+            "PaidService": 106,
         },
         "НЦК": {
             "CSAT": 93,
             "AHT": 11,
-            "FLR": 25,
-            "CSI": 10,  # С правками - 10, без - 32
+            "FLR": 37,
+            #"CSI": 10,  # С правками - 10, без - 32
             "POK": 9,
-            "DELAY": 54,  # Используется время доработки
-            "Sales": 68,
+            #"DELAY": 54,  # Используется время доработки
+            "Sales": 98,
             "SalesPotential": 87,
-            "PaidService": 86,
+            "PaidService": 102,
         },
     }
 
@@ -78,7 +78,7 @@ class UreAPI(BaseAPI):
             "CSAT": CSATDataRecord,
             "AHT": AHTDataRecord,
             "FLR": FLRDataRecord,
-            "CSI": CSIDataRecord,
+            #"CSI": CSIDataRecord,
             "POK": POKDataRecord,
             "DELAY": DelayDataRecord,
             "Sales": SalesDataRecord,
