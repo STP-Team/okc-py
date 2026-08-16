@@ -78,6 +78,11 @@ class SpecialistPremiumData(BasePremiumData):
     aht_weight: float | None = Field(None, alias="AHT_WEIGHT")
     aht_premium: float | None = Field(None, alias="PERC_AHT")
 
+    # Revenue
+    revenue: float | None = Field(None, alias="REVENUE")
+    revenue_normative: int | None = Field(None, alias="REVENUE_NORMATIVE")
+    revenue_normative_rate: float | None = Field(None, alias="NORM_REVENUE")
+
     # Специфичные для специалистов поля
     total_chats: int | None = Field(None, alias="TOTAL_CHATS")
     raw_premium: float | None = Field(None, alias="RAW_PREMIUM")
