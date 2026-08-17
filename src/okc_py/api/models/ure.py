@@ -91,26 +91,31 @@ class CSIDataRecord(BaseKPIRecord):
 
 
 class FLRDataRecord(BaseKPIRecord):
-    flr_total_contacts: int = Field(..., description="Общее количество контактов")
-    flr_services_transfers: int | None = Field(
-        None, alias="TOTAL_TRANSFER", description="Общее количество переводов"
-    )
-    flr_services: int = Field(
-        ..., alias="TOTAL_SERVICE", description="Общее количество сервисных заявок"
-    )
-    flr_services_cross: int = Field(
-        ..., alias="TOTAL_SERVICE2", description="Общее количество сквозных обращений"
-    )
-    flr: float | None = Field(None, alias="FLR", description="Значение FLR")
+    """Model for FLR data record."""
 
-    @model_validator(mode="before")
-    @classmethod
-    def normalize_total_contacts(cls, values: dict[str, Any]) -> dict[str, Any]:
-        for key in ("TOTAL_CHATS", "TOTAL_CALLS"):
-            if key in values:
-                values["flr_total_contacts"] = values[key]
-                break
-        return values
+    flr_services_transfers: int | None = Field(
+        None,
+        alias="TOTAL_TRANSFER",
+        description="Общее количество переводов",
+    )
+
+    flr_services: int | None = Field(
+        None,
+        alias="TOTAL_SERVICE",
+        description="Общее количество сервисных заявок",
+    )
+
+    flr_services_cross: int | None = Field(
+        None,
+        alias="TOTAL_SERVICE2",
+        description="Общее количество сквозных обращений",
+    )
+
+    flr: float | None = Field(
+        None,
+        alias="FLR",
+        description="Значение FLR",
+    )
 
 
 class POKDataRecord(BaseKPIRecord):
