@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import AliasChoices, BaseModel, Field, model_validator
 
 
 class BaseKPIRecord(BaseModel):
@@ -176,13 +176,41 @@ class DelayDataRecord(BaseKPIRecord):
 class SalesDataRecord(BaseKPIRecord):
     """Model for Sales data record."""
 
-    sales_videos: int | None = Field(None, alias="VIDEO")
-    sales_routers: int | None = Field(None, alias="ROUTER")
-    sales_tvs: int | None = Field(None, alias="TV")
-    sales_intercoms: int | None = Field(None, alias="DOMOFON")
-    sales_conversion: float | None = Field(None, alias="CONVERS")
+    sales_videos: int | None = Field(
+        None,
+        alias="VIDEO",
+    )
 
-    sales: int | None = Field(None, alias="TOTAL_EQUIPMENT")
+    sales_routers: int | None = Field(
+        None,
+        alias="ROUTER",
+    )
+
+    sales_tvs: int | None = Field(
+        None,
+        alias="TV",
+    )
+
+    sales_intercoms: int | None = Field(
+        None,
+        alias="DOMOFON",
+    )
+
+    sales_conversion: float | None = Field(
+        None,
+        validation_alias=AliasChoices(
+            "CONVERS",
+            "CONVERSION",
+        ),
+    )
+
+    sales: int | None = Field(
+        None,
+        validation_alias=AliasChoices(
+            "TOTAL_EQUIPMENT",
+            "SALES",
+        ),
+    )
 
 
 class SalesPotentialDataRecord(BaseKPIRecord):
