@@ -63,7 +63,7 @@ class UreAPI(BaseAPI):
             #"DELAY": 54,  # Используется время доработки
             "Sales": 98,
             "SalesPotential": 87,
-            "PaidService": 102,
+            "PaidService": 107,
         },
     }
 
